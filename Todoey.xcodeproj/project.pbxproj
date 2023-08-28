@@ -49,7 +49,6 @@
 		633337922A9C91CF00AB4F86 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				EB2BE4FD239524DB00FB933B /* TodoListViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -58,6 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				633337942A9C98A100AB4F86 /* Item.swift */,
+				EB2BE4FD239524DB00FB933B /* TodoListViewController.swift */,
 				633337962A9C9AAF00AB4F86 /* TodoBrain.swift */,
 			);
 			path = Controllers;
