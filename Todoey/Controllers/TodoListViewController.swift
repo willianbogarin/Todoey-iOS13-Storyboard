@@ -7,13 +7,19 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
+    
+    
     
     var itemArray = [Item]()
     
     let defaults = UserDefaults.standard
     
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,28 +33,21 @@ class TodoListViewController: UITableViewController {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-
-        
-        
-        
-        
-        
-        let newItem = Item()
-        newItem.title = "Mario Tennis"
-        itemArray.append(newItem)
-        
-        let newItem1 = Item()
-        newItem1.title = "Mario Party 2"
-        itemArray.append(newItem1)
         
         
         
         
         
         
-      if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-            itemArray = items
-       }
+        
+        //        print(dataFilePath)
+        
+        
+        
+        loadItems()
+        
+        
+        
         
     }
     
@@ -81,11 +80,14 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-
-            itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-
         
-        tableView.reloadData()
+        //        context.delete(itemArray[indexPath.row])
+        //        itemArray.remove(at: indexPath.row)
+        
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        
+        
+        saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -101,14 +103,14 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once user clicks the add item
             
-            let newItem = Item()
+            
+            
+            let newItem = Item(context: self.context)
             newItem.title = textField.text!
+            newItem.done = false
             
             self.itemArray.append(newItem)
-            
-            self.defaults.set(self.itemArray, forKey: "TodoListArray")
-            
-            self.tableView.reloadData()
+            self.saveItems()
             
         }
         
@@ -122,5 +124,54 @@ class TodoListViewController: UITableViewController {
         
     }
     
+    //MARK: - Model Manipulation Methods
+    func saveItems() {
+        
+        do {
+            try self.context.save()
+        }catch {
+            print("Error saving context, \(error)")
+        }
+        
+        tableView.reloadData()
+    }
+    func loadItems () {
+        
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        do{
+            itemArray = try context.fetch(request)
+        }catch{
+            print("Error loading context, \(error)")
+        }
+        tableView.reloadData()
+    }
+    
+    
+    
 }
 
+//MARK: - Search bar methods
+
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.predicate = predicate
+        
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        
+        request.sortDescriptors = [sortDescriptor]
+        
+        do{
+            itemArray = try context.fetch(request)
+        }catch{
+            print("Error loading context, \(error)")
+        }
+
+        tableView.reloadData()
+    }
+}
