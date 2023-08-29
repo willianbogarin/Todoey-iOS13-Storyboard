@@ -135,9 +135,8 @@ class TodoListViewController: UITableViewController {
         
         tableView.reloadData()
     }
-    func loadItems () {
+    func loadItems (with request: NSFetchRequest<Item> = Item.fetchRequest() ) {
         
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
         
         do{
             itemArray = try context.fetch(request)
@@ -162,17 +161,23 @@ extension TodoListViewController: UISearchBarDelegate {
         
         
         
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        let sortDescriptor = [NSSortDescriptor(key: "title", ascending: true)]
         
-        request.sortDescriptors = [sortDescriptor]
+        loadItems(with: request)
         
-        do{
-            itemArray = try context.fetch(request)
-        }catch{
-            print("Error loading context, \(error)")
-        }
-
-        tableView.reloadData()
+        
     }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            
+        }
+    }
+    
+    
 }
-//Testing commit/push from IDE
