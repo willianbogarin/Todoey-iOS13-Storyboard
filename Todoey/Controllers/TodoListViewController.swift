@@ -142,32 +142,25 @@ class TodoListViewController: UITableViewController {
         
         tableView.reloadData()
     }
-    func loadItems (with request: NSFetchRequest<Item> = Item.fetchRequest() ) {
+    func loadItems (with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil ) {
         
-        if request == Item.fetchRequest() {
+            let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
+        
+        if let additionalPredicate = predicate {
             
-            let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
-            request.predicate = predicate
-            
-            do{
-                itemArray = try context.fetch(request)
-            }catch{
-                print("Error loading context, \(error)")
-            }
-            tableView.reloadData()
-            
-        } else {
-            
-           
-            
-            do{
-                itemArray = try context.fetch(request)
-            }catch{
-                print("Error loading context, \(error)")
-            }
-            tableView.reloadData()
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
+        }else {
+            request.predicate = categoryPredicate
         }
-    }
+            
+            do{
+                itemArray = try context.fetch(request)
+            }catch{
+                print("Error loading context, \(error)")
+            }
+            tableView.reloadData()
+            
+        }
     
     
 }
@@ -186,7 +179,7 @@ extension TodoListViewController: UISearchBarDelegate {
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         request.sortDescriptors = [sortDescriptor]
         
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
         
         print("button pressed")
         print(predicate)
