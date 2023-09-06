@@ -11,3 +11,4 @@ import Foundation
 
 let CategoryCellID = "CategoryItemCell"
 let ItemCellID = "ToDoItemCell"
+let SegueItems = "goToItems"

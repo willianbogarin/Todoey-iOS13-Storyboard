@@ -41,6 +41,8 @@ class CategoryViewController: UITableViewController {
         
         
     }
+    
+    //MARK: - Add New Categories
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -81,18 +83,8 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCellID , for: indexPath)
-        
-        
-        let category = categoryArray[indexPath.row]
-        
-        cell.textLabel?.text = category.name
-        
-        //Ternary operator ==>
-        // value = condition ? valueifTrue : valueifFalse
-        
-        
-       // cell.accessoryType = item.done ? .checkmark : .none
-        
+             
+        cell.textLabel?.text = categoryArray[indexPath.row].name
    
         
         return cell
@@ -104,10 +96,17 @@ class CategoryViewController: UITableViewController {
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: SegueItems, sender: self)
 
-         saveItems()
-
-        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! TodoListViewController
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.selectedCategory = categoryArray[indexPath.row]
+        }
     }
     
     
