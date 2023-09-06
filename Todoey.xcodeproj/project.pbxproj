@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		632CF9AC2AA75AAF00C916C2 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632CF9AB2AA75AAF00C916C2 /* CategoryViewController.swift */; };
 		633337972A9C9AAF00AB4F86 /* TodoBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633337962A9C9AAF00AB4F86 /* TodoBrain.swift */; };
 		6333379B2A9DE17E00AB4F86 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 633337992A9DE17E00AB4F86 /* DataModel.xcdatamodeld */; };
 		EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE4F9239524DB00FB933B /* AppDelegate.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		632CF9AB2AA75AAF00C916C2 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		633337962A9C9AAF00AB4F86 /* TodoBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoBrain.swift; sourceTree = "<group>"; };
 		6333379A2A9DE17E00AB4F86 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		EB2BE4F6239524DB00FB933B /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +60,7 @@
 		633337932A9C91D800AB4F86 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				632CF9AB2AA75AAF00C916C2 /* CategoryViewController.swift */,
 				EB2BE4FD239524DB00FB933B /* TodoListViewController.swift */,
 				633337962A9C9AAF00AB4F86 /* TodoBrain.swift */,
 			);
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				632CF9AC2AA75AAF00C916C2 /* CategoryViewController.swift in Sources */,
 				633337972A9C9AAF00AB4F86 /* TodoBrain.swift in Sources */,
 				6333379B2A9DE17E00AB4F86 /* DataModel.xcdatamodeld in Sources */,
 				EB2BE4FE239524DB00FB933B /* TodoListViewController.swift in Sources */,

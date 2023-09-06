@@ -9,3 +9,5 @@
 import Foundation
 
 
+let CategoryCellID = "CategoryItemCell"
+let ItemCellID = "ToDoItemCell"
