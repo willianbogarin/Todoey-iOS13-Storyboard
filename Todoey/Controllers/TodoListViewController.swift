@@ -9,50 +9,64 @@
 import UIKit
 import CoreData
 import RealmSwift
+import ChameleonFramework
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     
     let realm = try! Realm()
     var todoItems : Results<Item>?
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     
     var selectedCategory : Category? {
         didSet {
             loadItems()
         }
     }
-    
+    var selectedCategoryColor: UIColor?
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
+
+        
+        tableView.separatorStyle = .none
+               
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let navBar = navigationController?.navigationBar else {fatalError("Navigation Controller doesn't exist!")}
         //Code to fix title bar color issue
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.systemTeal
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = selectedCategoryColor
+        navigationItem.title
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
+        searchBar.barTintColor = selectedCategoryColor
         
-        
-        
-        
-        
-        
-        
-        //        print(dataFilePath)
-        
-        
-        
-        
-        
-        
-        
-        
+        if let navBarColor = selectedCategoryColor {
+            navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+            
+            appearance.largeTitleTextAttributes = [.foregroundColor: ContrastColorOf(navBarColor, returnFlat: true)]
+            
+            title = selectedCategory!.name
+            
+        }
     }
+    
+
+
+  
+    
     
     //MARK - Tableview Datasource Methods
     
@@ -62,10 +76,23 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: ItemCellID, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
+    
+        let rowPercentage = CGFloat(indexPath.row)/CGFloat(todoItems!.count)
+        
+        if let color = selectedCategoryColor?.darken(byPercentage: CGFloat(rowPercentage)) {
+            
+            cell.backgroundColor = color
+            cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            
+            
+            
+        }
         
         if    let item = todoItems?[indexPath.row] {
+            
+                
             
             cell.textLabel?.text = item.title
             
@@ -74,6 +101,7 @@ class TodoListViewController: UITableViewController {
             
             
             cell.accessoryType = item.done ? .checkmark : .none
+         
         }else {
             cell.textLabel?.text = "No Items Added"
         }
@@ -90,8 +118,8 @@ class TodoListViewController: UITableViewController {
             
             do {
                 try realm.write {
-//                    item.done = !item.done
-                    realm.delete(item)
+                    item.done = !item.done
+                    
                 }
             }catch {
                 print("error saving done status, \(error)")
@@ -123,8 +151,10 @@ class TodoListViewController: UITableViewController {
                         let newItem = Item()
                         newItem.title = textField.text!
                         newItem.dateCreated = Date()
+              
                         currentCategory.items.append(newItem)
-                    
+                        
+                        
                     }
                 }catch {
                     print("Error saving Categories, \(error)")
@@ -156,31 +186,49 @@ class TodoListViewController: UITableViewController {
         
     }
     
+    //MARK: - Delete data from Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let itemForDeletion = todoItems?[indexPath.row] {
+            
+            do{
+                try realm.write{
+                    realm.delete(itemForDeletion)
+                }
+            }catch {
+                print("Error deleting category, \(error)")
+            }
+        }
+    }
     
 }
+
+
 
 //MARK: - Search bar methods
 
 extension TodoListViewController: UISearchBarDelegate {
-
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
-print("Button Clicked")
+        print("Button Clicked")
         
         tableView.reloadData()
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItems()
-
+            
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
-
+            
         }
     }
-
-
+    
+    
 }
+
+

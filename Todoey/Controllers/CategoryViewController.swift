@@ -7,19 +7,22 @@
 //
 
 import UIKit
-import CoreData
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+
+
+class CategoryViewController: SwipeTableViewController{
+    
     
     let realm = try! Realm()
     
     
     var categoryArray : Results<Category>?
     
-   
     
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,17 +34,20 @@ class CategoryViewController: UITableViewController {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-     
+        tableView.separatorStyle = .none
         
-     loadItems()
+        
+        loadItems()
         
         
         
         
     }
     
-    //MARK: - Add New Categories
 
+    
+    //MARK: - Add New Categories
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -50,12 +56,12 @@ class CategoryViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
             //what will happen once user clicks the add item
-            
-            
+            textFieldShouldEndEditing()
+
             
             let newCategory = Category()
             newCategory.name = textField.text!
-
+            newCategory.categoryColor = RandomFlatColor().hex()
             
             
             self.save(category: newCategory)
@@ -74,16 +80,26 @@ class CategoryViewController: UITableViewController {
     
     //MARK: - TableView Datasource Methods
     
+    
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return categoryArray?.count ?? 1
+        return categoryArray?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCellID , for: indexPath)
-             
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        let cellColor = categoryArray?[indexPath.row].categoryColor ?? "white"
+        
+        cell.backgroundColor = UIColor(hex: cellColor)
+        
+        cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+
+        
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories Added Yet."
-   
+        
         
         return cell
         
@@ -96,7 +112,7 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         performSegue(withIdentifier: SegueItems, sender: self)
-
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -104,6 +120,7 @@ class CategoryViewController: UITableViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categoryArray?[indexPath.row]
+            destinationVC.selectedCategoryColor = UIColor(hex: destinationVC.selectedCategory?.categoryColor ?? "#008080")
         }
     }
     
@@ -130,4 +147,30 @@ class CategoryViewController: UITableViewController {
         
     }
     
+    //MARK: - Delete Data From Swipe
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categoryArray?[indexPath.row]{
+            
+            do{
+                try self.realm.write{
+                    self.realm.delete(categoryForDeletion)
+                }
+            }catch {
+                print("Error deleting category, \(error)")
+            }
+        }
+    }
+    
 }
+extension CategoryViewController: UITextFieldDelegate {
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if textField.text != ""{
+            return true
+        }else {
+            textField.placeholder = "New Category"
+            return false
+        }
+    }
+}
+

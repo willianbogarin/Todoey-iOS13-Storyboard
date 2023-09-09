@@ -16,4 +16,5 @@ class Item: Object {
     @Persisted var done : Bool = false
     @Persisted var dateCreated : Date?
    @Persisted var parentCategory = LinkingObjects(fromType: Category.self, property: "items")
+    @Persisted var itemColor : String
 }

@@ -10,8 +10,10 @@
 		5C1AA243413BEC998F7ECE96 /* Pods_Todoey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E78A89F8E832891FDBC55EE /* Pods_Todoey.framework */; };
 		632CF9AC2AA75AAF00C916C2 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632CF9AB2AA75AAF00C916C2 /* CategoryViewController.swift */; };
 		633337972A9C9AAF00AB4F86 /* TodoBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633337962A9C9AAF00AB4F86 /* TodoBrain.swift */; };
+		633787142AACA70C00443C3C /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633787132AACA70C00443C3C /* SwipeTableViewController.swift */; };
 		634049AA2AAB2DE000DE6F03 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634049A92AAB2DE000DE6F03 /* Item.swift */; };
 		634049AC2AAB2DF700DE6F03 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634049AB2AAB2DF700DE6F03 /* Category.swift */; };
+		63720BE92AB07A04004EAFB5 /* Hue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63720BE82AB07A04004EAFB5 /* Hue.swift */; };
 		EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE4F9239524DB00FB933B /* AppDelegate.swift */; };
 		EB2BE4FE239524DB00FB933B /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE4FD239524DB00FB933B /* TodoListViewController.swift */; };
 		EB2BE501239524DB00FB933B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE4FF239524DB00FB933B /* Main.storyboard */; };
@@ -22,8 +24,10 @@
 /* Begin PBXFileReference section */
 		632CF9AB2AA75AAF00C916C2 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		633337962A9C9AAF00AB4F86 /* TodoBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoBrain.swift; sourceTree = "<group>"; };
+		633787132AACA70C00443C3C /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		634049A92AAB2DE000DE6F03 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		634049AB2AAB2DF700DE6F03 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		63720BE82AB07A04004EAFB5 /* Hue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hue.swift; sourceTree = "<group>"; };
 		99D84DCE29DF1A1285E2FB0B /* Pods-Todoey.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoey.release.xcconfig"; path = "Target Support Files/Pods-Todoey/Pods-Todoey.release.xcconfig"; sourceTree = "<group>"; };
 		9E78A89F8E832891FDBC55EE /* Pods_Todoey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Todoey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE99833B9C7053CFE8EF45CE /* Pods-Todoey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoey.debug.xcconfig"; path = "Target Support Files/Pods-Todoey/Pods-Todoey.debug.xcconfig"; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 			children = (
 				632CF9AB2AA75AAF00C916C2 /* CategoryViewController.swift */,
 				EB2BE4FD239524DB00FB933B /* TodoListViewController.swift */,
+				633787132AACA70C00443C3C /* SwipeTableViewController.swift */,
+				63720BE82AB07A04004EAFB5 /* Hue.swift */,
 				633337962A9C9AAF00AB4F86 /* TodoBrain.swift */,
 			);
 			path = Controllers;
@@ -251,8 +257,10 @@
 				632CF9AC2AA75AAF00C916C2 /* CategoryViewController.swift in Sources */,
 				633337972A9C9AAF00AB4F86 /* TodoBrain.swift in Sources */,
 				EB2BE4FE239524DB00FB933B /* TodoListViewController.swift in Sources */,
+				633787142AACA70C00443C3C /* SwipeTableViewController.swift in Sources */,
 				634049AA2AAB2DE000DE6F03 /* Item.swift in Sources */,
 				EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */,
+				63720BE92AB07A04004EAFB5 /* Hue.swift in Sources */,
 				634049AC2AAB2DF700DE6F03 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
