@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     
     let realm = try! Realm()
@@ -62,7 +62,7 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: ItemCellID, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         
         if    let item = todoItems?[indexPath.row] {
@@ -90,8 +90,8 @@ class TodoListViewController: UITableViewController {
             
             do {
                 try realm.write {
-//                    item.done = !item.done
-                    realm.delete(item)
+                    item.done = !item.done
+                    
                 }
             }catch {
                 print("error saving done status, \(error)")
@@ -124,7 +124,7 @@ class TodoListViewController: UITableViewController {
                         newItem.title = textField.text!
                         newItem.dateCreated = Date()
                         currentCategory.items.append(newItem)
-                    
+                        
                     }
                 }catch {
                     print("Error saving Categories, \(error)")
@@ -156,31 +156,49 @@ class TodoListViewController: UITableViewController {
         
     }
     
+    //MARK: - Delete data from Swipe
+
+    override func updateModel(at indexPath: IndexPath) {
+        if let itemForDeletion = todoItems?[indexPath.row] {
+            
+            do{
+                try realm.write{
+                    realm.delete(itemForDeletion)
+                }
+            }catch {
+                print("Error deleting category, \(error)")
+            }
+        }
+    }
     
 }
+
+
 
 //MARK: - Search bar methods
 
 extension TodoListViewController: UISearchBarDelegate {
-
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
-print("Button Clicked")
+        print("Button Clicked")
         
         tableView.reloadData()
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItems()
-
+            
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
-
+            
         }
     }
-
-
+    
+    
 }
+
+
