@@ -8,18 +8,16 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 class CategoryViewController: UITableViewController {
     
+    let realm = try! Realm()
     
-    var categoryArray = [Category]()
     
-    let defaults = UserDefaults.standard
+    var categoryArray : Results<Category>?
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Category.plist")
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+   
     
 
     override func viewDidLoad() {
@@ -33,9 +31,9 @@ class CategoryViewController: UITableViewController {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-        print (dataFilePath!)
+     
         
-        loadItems()
+     loadItems()
         
         
         
@@ -55,12 +53,12 @@ class CategoryViewController: UITableViewController {
             
             
             
-            let newCategory = Category(context: self.context)
+            let newCategory = Category()
             newCategory.name = textField.text!
-            // newItem.done = false
+
             
-            self.categoryArray.append(newCategory)
-            self.saveItems()
+            
+            self.save(category: newCategory)
             
         }
         
@@ -77,14 +75,14 @@ class CategoryViewController: UITableViewController {
     //MARK: - TableView Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categoryArray.count
+       return categoryArray?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCellID , for: indexPath)
              
-        cell.textLabel?.text = categoryArray[indexPath.row].name
+        cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories Added Yet."
    
         
         return cell
@@ -105,32 +103,31 @@ class CategoryViewController: UITableViewController {
         let destinationVC = segue.destination as! TodoListViewController
         
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = categoryArray[indexPath.row]
+            destinationVC.selectedCategory = categoryArray?[indexPath.row]
         }
     }
     
     
     //MARK: - Data Manipulation Methods
     
-    func saveItems() {
+    func save(category: Category) {
         
         do {
-            try self.context.save()
+            try realm.write{
+                realm.add(category)
+            }
         }catch {
-            print("Error saving context, \(error)")
+            print("Error saving Categories, \(error)")
         }
-        print("Data Saved")
+        print("Category Saved")
         tableView.reloadData()
     }
-    func loadItems (with request: NSFetchRequest<Category> = Category.fetchRequest() ) {
+    func loadItems () {
         
+        categoryArray = realm.objects(Category.self)
         
-        do{
-            categoryArray = try context.fetch(request)
-        }catch{
-            print("Error loading context, \(error)")
-        }
         tableView.reloadData()
+        
     }
     
 }

@@ -7,8 +7,30 @@
 //
 
 import Foundation
+import RealmSwift
+import UIKit
+
+
+let realm = try! Realm()
 
 
 let CategoryCellID = "CategoryItemCell"
 let ItemCellID = "ToDoItemCell"
 let SegueItems = "goToItems"
+
+
+//struct TodoBrain {
+//    
+//    func save(with data: Object) {
+//        
+//        do {
+//            try realm.write{
+//                realm.add(data)
+//            }
+//        }catch {
+//            print("Error saving Categories, \(error)")
+//        }
+//        print("Data Saved")
+//        
+//    }
+//}
